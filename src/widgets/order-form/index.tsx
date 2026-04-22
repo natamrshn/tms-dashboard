@@ -73,10 +73,18 @@ export function OrderForm({
     [onSubmit],
   )
 
+  const handleInvalid = useCallback(() => {
+    requestAnimationFrame(() => {
+      const formEl = document.getElementById('order-form')
+      const firstError = formEl?.querySelector<HTMLElement>('[aria-invalid="true"]')
+      firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }, [])
+
   return (
     <form
       id="order-form"
-      onSubmit={(e) => void handleSubmit(handleFormSubmit)(e)}
+      onSubmit={(e) => void handleSubmit(handleFormSubmit, handleInvalid)(e)}
       onBlur={onBlurSave}
       className="space-y-8"
       noValidate
