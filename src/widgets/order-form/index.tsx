@@ -54,10 +54,12 @@ export function OrderForm({
   // When the active draft switches, reset the form with new values
   useEffect(() => {
     reset({ ...buildDefaultValues(), ...initialValues })
-  }, [draftId, reset]) // intentionally excluding initialValues to avoid re-render loops
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally excluding initialValues to avoid re-render loops
+  }, [draftId, reset])
 
   // Sync form changes up to parent (for autosave)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const sub = watch((values) => {
       onValuesChange(values as Partial<CreateOrderFormValues>)
     })

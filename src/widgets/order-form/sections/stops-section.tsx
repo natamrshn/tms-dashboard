@@ -1,5 +1,5 @@
 import { useFieldArray, Controller } from 'react-hook-form'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { Plus, Trash2, MapPin, ChevronUp, ChevronDown, GripVertical } from 'lucide-react'
 import type { CreateOrderFormValues } from '@/entities/order/lib/order.schema'
@@ -37,11 +37,11 @@ export function StopsSection({ form }: StopsSectionProps) {
   const { fields, append, remove, move } = useFieldArray({ control, name: 'stops' })
 
   const stopsErrors = errors.stops
-  const dragIndexRef = useRef<number | null>(null)
+  const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
   function handleDragStart(index: number) {
-    dragIndexRef.current = index
+    setDragIndex(index)
   }
 
   function handleDragOver(e: React.DragEvent, index: number) {
@@ -51,15 +51,15 @@ export function StopsSection({ form }: StopsSectionProps) {
 
   function handleDrop(e: React.DragEvent, index: number) {
     e.preventDefault()
-    if (dragIndexRef.current !== null && dragIndexRef.current !== index) {
-      move(dragIndexRef.current, index)
+    if (dragIndex !== null && dragIndex !== index) {
+      move(dragIndex, index)
     }
-    dragIndexRef.current = null
+    setDragIndex(null)
     setDragOverIndex(null)
   }
 
   function handleDragEnd() {
-    dragIndexRef.current = null
+    setDragIndex(null)
     setDragOverIndex(null)
   }
 
@@ -126,7 +126,7 @@ export function StopsSection({ form }: StopsSectionProps) {
 
               <div className={cn(
                 'border rounded-xl bg-white overflow-hidden transition-colors',
-                dragOverIndex === index && dragIndexRef.current !== index
+                dragOverIndex === index && dragIndex !== index
                   ? 'border-primary/60 shadow-md ring-2 ring-primary/20'
                   : 'border-gray-200',
               )}>
